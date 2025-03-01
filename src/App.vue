@@ -1,46 +1,39 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref } from 'vue'
+
+const dialog = ref(false)
 import TodoForm from './components/form/todoForm.vue'
-import { useTodoStore } from './stores/TodoStore.js'
-
-const todoStore = useTodoStore()
-
-const removeTodo = (todo) => {
-  todoStore.removeTodo(todo)
-}
+import TodoList from './components/todoList/todoList.vue'
 </script>
 
 <template>
-  <main class="app">
-    <section class="greeting">
-      <h2 class="title">Sua lista de tarefas</h2>
-    </section>
-    <section class="create-todo">
-      <TodoForm />
-    </section>
-    <section class="todo-list">
-      <h3>TODO LIST</h3>
-      <div class="list">
-        <div
-          v-for="todo in todoStore.todos"
-          :class="`todo-item ${todo.done && 'done'}`"
+  <v-app>
+    <v-container>
+      <v-toolbar :elevation="8">
+        <v-toolbar-title>Lista de tarefas</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn @click="dialog = true">
+          <v-icon icon="mdi-note-plus"></v-icon>
+          Nova tarefa
+        </v-btn>
+      </v-toolbar>
+      <v-dialog v-model="dialog" width="auto">
+        <v-card
+          max-width="900"
+          min-width="700"
+          min-height="300"
+          prepend-icon="mdi-note-plus"
+          title="Criar nova tarefa"
         >
-          <label>
-            <input type="checkbox" v-model="todo.done" />
-            <span :class="`bubble ${todo.category}`"></span>
-
-            <div class="todo-content">
-              <input type="text" v-model="todo.content" />
-            </div>
-
-            <div class="actions">
-              <button class="delete" @click="removeTodo(todo)">Delete</button>
-            </div>
-          </label>
-        </div>
-      </div>
-    </section>
-  </main>
+          <TodoForm />
+        </v-card>
+      </v-dialog>
+      <!-- </section> -->
+      <!-- <section class="todo-list"> -->
+      <!--   <TodoList /> -->
+      <!-- </section> -->
+    </v-container>
+  </v-app>
 </template>
 
 <style scoped></style>
